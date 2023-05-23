@@ -1,0 +1,22 @@
+[2023-05-22T19:59:10.620+0000] {taskinstance.py:1103} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: spotify_dag.whole_spotify_etl scheduled__2022-07-02T00:00:00+00:00 [queued]>
+[2023-05-22T19:59:10.633+0000] {taskinstance.py:1103} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: spotify_dag.whole_spotify_etl scheduled__2022-07-02T00:00:00+00:00 [queued]>
+[2023-05-22T19:59:10.634+0000] {taskinstance.py:1308} INFO - Starting attempt 2 of 2
+[2023-05-22T19:59:10.672+0000] {taskinstance.py:1327} INFO - Executing <Task(PythonOperator): whole_spotify_etl> on 2022-07-02 00:00:00+00:00
+[2023-05-22T19:59:10.684+0000] {standard_task_runner.py:57} INFO - Started process 706 to run task
+[2023-05-22T19:59:10.689+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'spotify_dag', 'whole_spotify_etl', 'scheduled__2022-07-02T00:00:00+00:00', '--job-id', '899', '--raw', '--subdir', 'DAGS_FOLDER/my-dag.py', '--cfg-path', '/tmp/tmp3r4gf1pl']
+[2023-05-22T19:59:10.690+0000] {standard_task_runner.py:85} INFO - Job 899: Subtask whole_spotify_etl
+[2023-05-22T19:59:10.767+0000] {task_command.py:410} INFO - Running <TaskInstance: spotify_dag.whole_spotify_etl scheduled__2022-07-02T00:00:00+00:00 [running]> on host 676151ea7c9e
+[2023-05-22T19:59:37.749+0000] {taskinstance.py:1547} INFO - Exporting env vars: AIRFLOW_CTX_DAG_EMAIL='***@example.com' AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='spotify_dag' AIRFLOW_CTX_TASK_ID='whole_spotify_etl' AIRFLOW_CTX_EXECUTION_DATE='2022-07-02T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='2' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2022-07-02T00:00:00+00:00'
+[2023-05-22T19:59:37.995+0000] {taskinstance.py:1824} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/operators/python.py", line 181, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/operators/python.py", line 198, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/spotify_etl.py", line 82, in run_spotify_etl
+    for song in data["items"]:
+KeyError: 'items'
+[2023-05-22T19:59:38.009+0000] {taskinstance.py:1350} INFO - Marking task as FAILED. dag_id=spotify_dag, task_id=whole_spotify_etl, execution_date=20220702T000000, start_date=20230522T195910, end_date=20230522T195938
+[2023-05-22T19:59:38.164+0000] {standard_task_runner.py:109} ERROR - Failed to execute job 899 for task whole_spotify_etl ('items'; 706)
+[2023-05-22T19:59:38.213+0000] {local_task_job_runner.py:225} INFO - Task exited with return code 1
+[2023-05-22T19:59:38.238+0000] {taskinstance.py:2651} INFO - 0 downstream tasks scheduled from follow-on schedule check

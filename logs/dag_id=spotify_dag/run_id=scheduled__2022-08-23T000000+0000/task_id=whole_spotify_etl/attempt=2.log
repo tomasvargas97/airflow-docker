@@ -1,0 +1,40 @@
+[2023-05-22T23:28:05.566+0000] {taskinstance.py:1103} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: spotify_dag.whole_spotify_etl scheduled__2022-08-23T00:00:00+00:00 [queued]>
+[2023-05-22T23:28:05.604+0000] {taskinstance.py:1103} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: spotify_dag.whole_spotify_etl scheduled__2022-08-23T00:00:00+00:00 [queued]>
+[2023-05-22T23:28:05.605+0000] {taskinstance.py:1308} INFO - Starting attempt 2 of 2
+[2023-05-22T23:28:05.870+0000] {taskinstance.py:1327} INFO - Executing <Task(PythonOperator): whole_spotify_etl> on 2022-08-23 00:00:00+00:00
+[2023-05-22T23:28:05.886+0000] {standard_task_runner.py:57} INFO - Started process 247 to run task
+[2023-05-22T23:28:05.896+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'spotify_dag', 'whole_spotify_etl', 'scheduled__2022-08-23T00:00:00+00:00', '--job-id', '1044', '--raw', '--subdir', 'DAGS_FOLDER/my-dag.py', '--cfg-path', '/tmp/tmphd1z2nnl']
+[2023-05-22T23:28:05.901+0000] {standard_task_runner.py:85} INFO - Job 1044: Subtask whole_spotify_etl
+[2023-05-22T23:28:06.120+0000] {task_command.py:410} INFO - Running <TaskInstance: spotify_dag.whole_spotify_etl scheduled__2022-08-23T00:00:00+00:00 [running]> on host 6819d12c99bf
+[2023-05-22T23:28:26.575+0000] {taskinstance.py:1547} INFO - Exporting env vars: AIRFLOW_CTX_DAG_EMAIL='***@example.com' AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='spotify_dag' AIRFLOW_CTX_TASK_ID='whole_spotify_etl' AIRFLOW_CTX_EXECUTION_DATE='2022-08-23T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='2' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2022-08-23T00:00:00+00:00'
+[2023-05-22T23:29:00.877+0000] {client.py:259} ERROR - HTTP Error for GET to https://api.spotify.com/v1/search returned 400 due to Bad request.
+[2023-05-22T23:29:00.878+0000] {taskinstance.py:1824} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/spotipy/client.py", line 245, in _internal_call
+    response.raise_for_status()
+  File "/home/airflow/.local/lib/python3.7/site-packages/requests/models.py", line 1021, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 400 Client Error: Bad Request for url: https://api.spotify.com/v1/search?q=year%3A2018&limit=50&offset=1000&type=track
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/operators/python.py", line 181, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/operators/python.py", line 198, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/spotify_etl.py", line 35, in run_spotify_etl
+    track_results = sp.search(q='year:2018', type='track', limit=50, offset=i)
+  File "/home/airflow/.local/lib/python3.7/site-packages/spotipy/client.py", line 545, in search
+    "search", q=q, limit=limit, offset=offset, type=type, market=market
+  File "/home/airflow/.local/lib/python3.7/site-packages/spotipy/client.py", line 291, in _get
+    return self._internal_call("GET", url, payload, kwargs)
+  File "/home/airflow/.local/lib/python3.7/site-packages/spotipy/client.py", line 266, in _internal_call
+    headers=response.headers,
+spotipy.exceptions.SpotifyException: http status: 400, code:-1 - https://api.spotify.com/v1/search?q=year%3A2018&limit=50&offset=1000&type=track:
+ Bad request., reason: None
+[2023-05-22T23:29:00.895+0000] {taskinstance.py:1350} INFO - Marking task as FAILED. dag_id=spotify_dag, task_id=whole_spotify_etl, execution_date=20220823T000000, start_date=20230522T232805, end_date=20230522T232900
+[2023-05-22T23:29:00.918+0000] {standard_task_runner.py:109} ERROR - Failed to execute job 1044 for task whole_spotify_etl (http status: 400, code:-1 - https://api.spotify.com/v1/search?q=year%3A2018&limit=50&offset=1000&type=track:
+ Bad request., reason: None; 247)
+[2023-05-22T23:29:00.934+0000] {local_task_job_runner.py:225} INFO - Task exited with return code 1
+[2023-05-22T23:29:00.955+0000] {taskinstance.py:2651} INFO - 0 downstream tasks scheduled from follow-on schedule check

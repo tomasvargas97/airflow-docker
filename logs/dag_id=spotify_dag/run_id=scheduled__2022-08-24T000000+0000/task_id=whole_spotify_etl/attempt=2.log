@@ -1,0 +1,75 @@
+[2023-05-22T23:27:48.297+0000] {taskinstance.py:1103} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: spotify_dag.whole_spotify_etl scheduled__2022-08-24T00:00:00+00:00 [queued]>
+[2023-05-22T23:28:05.028+0000] {taskinstance.py:1103} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: spotify_dag.whole_spotify_etl scheduled__2022-08-24T00:00:00+00:00 [queued]>
+[2023-05-22T23:28:05.036+0000] {taskinstance.py:1308} INFO - Starting attempt 2 of 2
+[2023-05-22T23:28:05.110+0000] {taskinstance.py:1327} INFO - Executing <Task(PythonOperator): whole_spotify_etl> on 2022-08-24 00:00:00+00:00
+[2023-05-22T23:28:05.132+0000] {standard_task_runner.py:57} INFO - Started process 234 to run task
+[2023-05-22T23:28:05.162+0000] {standard_task_runner.py:84} INFO - Running: ['***', 'tasks', 'run', 'spotify_dag', 'whole_spotify_etl', 'scheduled__2022-08-24T00:00:00+00:00', '--job-id', '1036', '--raw', '--subdir', 'DAGS_FOLDER/my-dag.py', '--cfg-path', '/tmp/tmpzuuczcaw']
+[2023-05-22T23:28:05.167+0000] {standard_task_runner.py:85} INFO - Job 1036: Subtask whole_spotify_etl
+[2023-05-22T23:28:05.579+0000] {task_command.py:410} INFO - Running <TaskInstance: spotify_dag.whole_spotify_etl scheduled__2022-08-24T00:00:00+00:00 [running]> on host 6819d12c99bf
+[2023-05-22T23:28:06.037+0000] {taskinstance.py:1547} INFO - Exporting env vars: AIRFLOW_CTX_DAG_EMAIL='***@example.com' AIRFLOW_CTX_DAG_OWNER='***' AIRFLOW_CTX_DAG_ID='spotify_dag' AIRFLOW_CTX_TASK_ID='whole_spotify_etl' AIRFLOW_CTX_EXECUTION_DATE='2022-08-24T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='2' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2022-08-24T00:00:00+00:00'
+[2023-05-22T23:28:22.220+0000] {taskinstance.py:1824} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/urllib3/connectionpool.py", line 449, in _make_request
+    six.raise_from(e, None)
+  File "<string>", line 3, in raise_from
+  File "/home/airflow/.local/lib/python3.7/site-packages/urllib3/connectionpool.py", line 444, in _make_request
+    httplib_response = conn.getresponse()
+  File "/usr/local/lib/python3.7/http/client.py", line 1373, in getresponse
+    response.begin()
+  File "/usr/local/lib/python3.7/http/client.py", line 319, in begin
+    version, status, reason = self._read_status()
+  File "/usr/local/lib/python3.7/http/client.py", line 280, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+  File "/usr/local/lib/python3.7/socket.py", line 589, in readinto
+    return self._sock.recv_into(b)
+  File "/usr/local/lib/python3.7/ssl.py", line 1071, in recv_into
+    return self.read(nbytes, buffer)
+  File "/usr/local/lib/python3.7/ssl.py", line 929, in read
+    return self._sslobj.read(len, buffer)
+socket.timeout: The read operation timed out
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/requests/adapters.py", line 497, in send
+    chunked=chunked,
+  File "/home/airflow/.local/lib/python3.7/site-packages/urllib3/connectionpool.py", line 788, in urlopen
+    method, url, error=e, _pool=self, _stacktrace=sys.exc_info()[2]
+  File "/home/airflow/.local/lib/python3.7/site-packages/urllib3/util/retry.py", line 550, in increment
+    raise six.reraise(type(error), error, _stacktrace)
+  File "/home/airflow/.local/lib/python3.7/site-packages/urllib3/packages/six.py", line 770, in reraise
+    raise value
+  File "/home/airflow/.local/lib/python3.7/site-packages/urllib3/connectionpool.py", line 710, in urlopen
+    chunked=chunked,
+  File "/home/airflow/.local/lib/python3.7/site-packages/urllib3/connectionpool.py", line 451, in _make_request
+    self._raise_timeout(err=e, url=url, timeout_value=read_timeout)
+  File "/home/airflow/.local/lib/python3.7/site-packages/urllib3/connectionpool.py", line 341, in _raise_timeout
+    self, url, "Read timed out. (read timeout=%s)" % timeout_value
+urllib3.exceptions.ReadTimeoutError: HTTPSConnectionPool(host='api.spotify.com', port=443): Read timed out. (read timeout=5)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/operators/python.py", line 181, in execute
+    return_value = self.execute_callable()
+  File "/home/airflow/.local/lib/python3.7/site-packages/airflow/operators/python.py", line 198, in execute_callable
+    return self.python_callable(*self.op_args, **self.op_kwargs)
+  File "/opt/airflow/dags/spotify_etl.py", line 35, in run_spotify_etl
+    track_results = sp.search(q='year:2018', type='track', limit=50, offset=i)
+  File "/home/airflow/.local/lib/python3.7/site-packages/spotipy/client.py", line 545, in search
+    "search", q=q, limit=limit, offset=offset, type=type, market=market
+  File "/home/airflow/.local/lib/python3.7/site-packages/spotipy/client.py", line 291, in _get
+    return self._internal_call("GET", url, payload, kwargs)
+  File "/home/airflow/.local/lib/python3.7/site-packages/spotipy/client.py", line 242, in _internal_call
+    timeout=self.requests_timeout, **args
+  File "/home/airflow/.local/lib/python3.7/site-packages/requests/sessions.py", line 587, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/home/airflow/.local/lib/python3.7/site-packages/requests/sessions.py", line 701, in send
+    r = adapter.send(request, **kwargs)
+  File "/home/airflow/.local/lib/python3.7/site-packages/requests/adapters.py", line 532, in send
+    raise ReadTimeout(e, request=request)
+requests.exceptions.ReadTimeout: HTTPSConnectionPool(host='api.spotify.com', port=443): Read timed out. (read timeout=5)
+[2023-05-22T23:28:36.337+0000] {taskinstance.py:1350} INFO - Marking task as FAILED. dag_id=spotify_dag, task_id=whole_spotify_etl, execution_date=20220824T000000, start_date=20230522T232805, end_date=20230522T232836
+[2023-05-22T23:28:36.379+0000] {standard_task_runner.py:109} ERROR - Failed to execute job 1036 for task whole_spotify_etl (HTTPSConnectionPool(host='api.spotify.com', port=443): Read timed out. (read timeout=5); 234)
+[2023-05-22T23:29:00.518+0000] {local_task_job_runner.py:225} INFO - Task exited with return code 1
+[2023-05-22T23:29:00.556+0000] {taskinstance.py:2651} INFO - 0 downstream tasks scheduled from follow-on schedule check
