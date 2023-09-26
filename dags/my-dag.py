@@ -24,9 +24,10 @@ default_args = {
     'depends_on_past': False,
     'start_date': datetime(2023, 1, 1),
     'retries': 1,
+    'schedule_interval': '@daily'
 }
 
-dag = DAG('spotify_top_50_us_to_local_postgres', default_args=default_args, schedule_interval=None)
+dag = DAG('spotify_top_50_us_to_local_postgres', default_args=default_args, schedule_interval='@daily', catchup = False)
 
 def generate_access_token():
     client_credentials_manager = SpotifyClientCredentials(
