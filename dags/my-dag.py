@@ -60,7 +60,7 @@ def extract_top_50_us(**kwargs):
         'limit': 50,
     }
 
-    response = requests.get('https://api.spotify.com/v1/artists/06HL4z0CvFAxyc27GXpf02/top-tracks', params=params, headers=headers)
+    response = requests.get('https://api.spotify.com/v1/playlists/37i9dQZEVXbLRQDuF5jeBp/tracks', params=params, headers=headers)
 
     if response.status_code == 200:
         top_tracks = response.json()
@@ -96,20 +96,23 @@ def load_to_local_postgres(**kwargs):
     CREATE TABLE IF NOT EXISTS top_tracks (
         track_name TEXT,
         artist_name TEXT,
-        album_name TEXT
+        album_name TEXT,
+        date_pulled DATE
     );
     """
+
     cursor.execute(create_table_sql)
 
-    # Insert the top tracks into the local PostgreSQL table
-    for track in top_tracks['tracks']:
-        insert_sql = """
-        INSERT INTO top_tracks (track_name, artist_name, album_name)
-        VALUES (%s, %s, %s);
-        """
-        cursor.execute(insert_sql, (track['name'], track['artists'][0]['name'], track['album']['name']))
 
-    # Commit and close the database connection
+    #Insert the top tracks into the local PostgreSQL table
+    for track_details in top_tracks['items']:
+        insert_sql = """
+        INSERT INTO top_tracks (track_name, artist_name, album_name, date_pulled)
+        VALUES (%s, %s, %s, current_date);
+        """
+        cursor.execute(insert_sql, (track_details['track']['name'], ', '.join([artist['name'] for artist in track_details['track']['artists']]), track_details['track']['album']['name']))
+
+    #Commit and close the database connection
     conn.commit()
     conn.close()
 
